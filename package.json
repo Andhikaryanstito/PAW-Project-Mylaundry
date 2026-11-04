@@ -1,0 +1,26 @@
+{
+  "name": "paw-project-mylaundry",
+  "version": "1.0.0",
+  "description": "Website Kasir MyLaundry untuk UMKM Laundry - PPAW Week 7",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "node --watch app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "express",
+    "ejs",
+    "mvc",
+    "rest-api",
+    "middleware-logger",
+    "mylaundry"
+  ],
+  "author": "Andhika Ryan Stito - 20240140263",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "ejs": "^7.0.2",
+    "express": "^5.3.0"
+  }
+}

@@ -1,0 +1,88 @@
+<!-- MODAL POPUP: NOTA DIGITAL & WHATSAPP SENDER (PRD US-04 & US-05) -->
+<div id="receipt-modal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
+  <div class="bg-white rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl border border-slate-200 transform transition-all duration-300 scale-95 opacity-0" id="modal-box">
+    
+    <!-- Modal Header (Royal Navy Background) -->
+    <div class="bg-[#1E3A8A] px-6 py-4 text-white flex items-center justify-between">
+      <div class="flex items-center space-x-2.5">
+        <span class="text-xl">🧾</span>
+        <div>
+          <h4 class="font-extrabold text-sm tracking-tight leading-none">Nota Digital Transaksi</h4>
+          <p class="text-[11px] text-blue-200 mt-1">Tersimpan di Sistem • Siap Kirim ke WhatsApp Pelanggan</p>
+        </div>
+      </div>
+      <button onclick="closeReceiptModal()" class="w-8 h-8 rounded-lg bg-blue-900/60 hover:bg-blue-900 text-blue-100 flex items-center justify-center text-sm font-bold transition">
+        ✕
+      </button>
+    </div>
+
+    <!-- Receipt Content (Paper Thermal Receipt Style) -->
+    <div class="p-6 space-y-4 text-xs">
+      
+      <!-- Receipt Header -->
+      <div class="bg-slate-50 rounded-xl p-3.5 border border-dashed border-slate-300 text-center space-y-1">
+        <p class="text-slate-500 font-bold uppercase tracking-widest text-[10px]">MYLAUNDRY BANTUL</p>
+        <h3 class="text-lg font-black text-slate-900 tracking-tight font-mono" id="receipt-id">#ORD-103</h3>
+        <p class="text-slate-500 text-[11px]" id="receipt-date">29 Oktober 2026 • Kasir: Sarah</p>
+      </div>
+
+      <!-- Receipt Rows -->
+      <div class="space-y-2 py-1">
+        <div class="flex justify-between py-1 border-b border-slate-100">
+          <span class="text-slate-500 font-medium">Nama Pelanggan:</span>
+          <span class="font-bold text-slate-900" id="receipt-cust">Budi Santoso</span>
+        </div>
+        <div class="flex justify-between py-1 border-b border-slate-100">
+          <span class="text-slate-500 font-medium">Nomor WhatsApp:</span>
+          <span class="font-mono font-bold text-slate-800" id="receipt-phone">081234567890</span>
+        </div>
+        <div class="flex justify-between py-1 border-b border-slate-100">
+          <span class="text-slate-500 font-medium">Layanan &amp; Berat:</span>
+          <span class="font-bold text-slate-800" id="receipt-pkg">Cuci Reguler (3.5 Kg)</span>
+        </div>
+        <div class="flex justify-between py-1 border-b border-slate-100">
+          <span class="text-slate-500 font-medium">Keterangan:</span>
+          <span class="font-medium text-slate-700" id="receipt-notes">Pakaian harian campur</span>
+        </div>
+        <div class="flex justify-between py-1 border-b border-slate-100">
+          <span class="text-slate-500 font-medium">Status Bayar:</span>
+          <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-800 border border-blue-200" id="receipt-pay-status">Lunas (Tunai)</span>
+        </div>
+        <div class="flex justify-between py-2 border-b-2 border-slate-200 text-sm">
+          <span class="font-bold text-slate-900">TOTAL BAYAR:</span>
+          <span class="font-black text-blue-700 text-base font-mono" id="receipt-total">Rp 24.500</span>
+        </div>
+        <div class="bg-blue-50 rounded-xl p-3 border border-blue-100 text-center space-y-0.5">
+          <p class="text-[10px] font-bold uppercase tracking-wider text-blue-700">Perkiraan Siap Ambil</p>
+          <p class="font-extrabold text-xs text-blue-900" id="receipt-ready">Sabtu, 31 Okt 2026 - 15:00 WIB</p>
+        </div>
+      </div>
+
+      <!-- WhatsApp Chat Preview -->
+      <div class="bg-[#EFEAE2] rounded-xl p-3 space-y-2 border border-slate-200">
+        <div class="flex items-center justify-between text-[11px] text-emerald-800 font-bold">
+          <span class="flex items-center">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 mr-1.5 animate-pulse"></span>
+            Pratinjau Pesan WhatsApp
+          </span>
+          <span class="font-mono text-slate-500 text-[10px]">wa.me format</span>
+        </div>
+        <div class="bg-white rounded-lg p-3 text-xs font-mono text-slate-800 whitespace-pre-line border border-slate-200/80 shadow-sm leading-relaxed" id="wa-text-preview">
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="pt-2 flex items-center space-x-2.5">
+        <button onclick="openWhatsAppURL()" class="flex-1 py-2.5 px-4 bg-[#25D366] hover:bg-[#20bd5a] text-white font-extrabold rounded-xl shadow-sm transition flex items-center justify-center space-x-2">
+          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.592 2.654-.696c1 .587 1.708.835 2.806.835 3.18 0 5.767-2.587 5.768-5.766.001-3.182-2.585-5.768-5.768-5.768zm7.168 5.765c-.002 3.954-3.218 7.17-7.17 7.17-1.22 0-2.368-.31-3.376-.856l-3.953 1.036 1.054-3.856c-.61-1.056-.933-2.26-.934-3.494.002-3.954 3.219-7.17 7.171-7.17 3.953.001 7.17 3.218 7.17 7.17z"/></svg>
+          <span>KIRIM NOTA KE WHATSAPP ➔</span>
+        </button>
+        <button onclick="closeReceiptModal()" class="py-2.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition text-xs">
+          Tutup
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+</div>
