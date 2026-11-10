@@ -4,50 +4,134 @@
 <div class="flex-1 flex flex-col min-h-screen overflow-x-hidden bg-slate-50">
 
   <main class="p-6 md:p-8 space-y-6 flex-1">
-    <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-subtle space-y-2">
+    <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-card space-y-2">
       <div class="flex items-center space-x-2">
         <span class="px-2.5 py-0.5 bg-blue-100 text-blue-800 text-xs font-bold rounded-md border border-blue-200">
-          Spesifikasi Tugas Praktikum Week 7
+          Spesifikasi Tugas Praktikum Week 8 (CRUD &amp; PostgreSQL)
+        </span>
+        <span class="px-2.5 py-0.5 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-md border border-emerald-200">
+          Database: PostgreSQL (mylaundry)
         </span>
       </div>
-      <h1 class="text-xl font-extrabold tracking-tight text-slate-900">Dokumentasi REST API &amp; Middleware Logger</h1>
-      <p class="text-xs text-slate-500 max-w-2xl font-medium leading-relaxed">
-        Pengujian endpoint resmi <code class="bg-slate-100 text-blue-700 px-1.5 py-0.5 rounded font-mono font-bold">GET /api/status</code> dan 
-        <code class="bg-slate-100 text-blue-700 px-1.5 py-0.5 rounded font-mono font-bold">GET /api/produk</code> sesuai ketentuan Praktikum Pemrograman Aplikasi Web (PPAW - TI503P).
+      <h1 class="text-xl font-extrabold tracking-tight text-slate-900">Dokumentasi REST API CRUD &amp; Middleware Logger</h1>
+      <p class="text-xs text-slate-600 max-w-2xl font-medium leading-relaxed">
+        Pengujian seluruh endpoint CRUD resmi yang terhubung langsung ke database PostgreSQL: 
+        <code class="bg-slate-100 text-blue-700 px-1 py-0.5 rounded font-mono font-bold">GET /api/status</code>, 
+        <code class="bg-slate-100 text-blue-700 px-1 py-0.5 rounded font-mono font-bold">GET /api/produk</code>, 
+        <code class="bg-slate-100 text-blue-700 px-1 py-0.5 rounded font-mono font-bold">GET /api/produk/:id</code>, 
+        <code class="bg-slate-100 text-blue-700 px-1 py-0.5 rounded font-mono font-bold">POST /api/produk</code>, 
+        <code class="bg-slate-100 text-blue-700 px-1 py-0.5 rounded font-mono font-bold">PUT /api/produk/:id</code>, dan 
+        <code class="bg-slate-100 text-blue-700 px-1 py-0.5 rounded font-mono font-bold">DELETE /api/produk/:id</code>.
       </p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-      <!-- Card 1 -->
-      <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-subtle space-y-3">
-        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-          <div class="flex items-center space-x-2">
-            <span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 font-mono font-bold text-xs rounded">GET</span>
-            <code class="font-mono font-bold text-slate-800 text-xs">/api/status</code>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <!-- 1. GET /api/status -->
+      <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-card space-y-3 flex flex-col justify-between">
+        <div class="space-y-2">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+            <div class="flex items-center space-x-2">
+              <span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 font-mono font-bold text-xs rounded border border-emerald-300">GET</span>
+              <code class="font-mono font-bold text-slate-900 text-xs">/api/status</code>
+            </div>
+            <a href="/api/status" target="_blank" class="px-2.5 py-1 bg-slate-100 hover:bg-blue-50 hover:text-blue-700 text-slate-700 rounded-lg text-[11px] font-bold transition border border-slate-200">
+              Buka ↗
+            </a>
           </div>
-          <a href="/api/status" target="_blank" class="px-3 py-1 bg-slate-100 hover:bg-blue-50 hover:text-blue-800 text-slate-700 rounded-lg text-xs font-bold transition flex items-center space-x-1 border border-slate-200">
-            <span>Buka Tab Baru ↗</span>
-          </a>
+          <p class="text-xs text-slate-600">Status server, uptime, memori, dan status koneksi database PostgreSQL.</p>
         </div>
-        <p class="text-xs text-slate-500 leading-relaxed">
-          Mengembalikan status server, uptime sistem, pemakaian memori, dan identitas toko dalam format JSON.
-        </p>
+        <div class="bg-slate-900 rounded-xl p-3 text-[11px] font-mono text-emerald-400 overflow-x-auto">
+          Response: JSON Object (status: "connected")
+        </div>
       </div>
 
-      <!-- Card 2 -->
-      <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-subtle space-y-3">
-        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-          <div class="flex items-center space-x-2">
-            <span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 font-mono font-bold text-xs rounded">GET</span>
-            <code class="font-mono font-bold text-slate-800 text-xs">/api/produk</code>
+      <!-- 2. GET /api/produk -->
+      <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-card space-y-3 flex flex-col justify-between">
+        <div class="space-y-2">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+            <div class="flex items-center space-x-2">
+              <span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 font-mono font-bold text-xs rounded border border-emerald-300">GET</span>
+              <code class="font-mono font-bold text-slate-900 text-xs">/api/produk</code>
+            </div>
+            <a href="/api/produk" target="_blank" class="px-2.5 py-1 bg-slate-100 hover:bg-blue-50 hover:text-blue-700 text-slate-700 rounded-lg text-[11px] font-bold transition border border-slate-200">
+              Buka ↗
+            </a>
           </div>
-          <a href="/api/produk" target="_blank" class="px-3 py-1 bg-slate-100 hover:bg-blue-50 hover:text-blue-800 text-slate-700 rounded-lg text-xs font-bold transition flex items-center space-x-1 border border-slate-200">
-            <span>Buka Tab Baru ↗</span>
-          </a>
+          <p class="text-xs text-slate-600">Mengambil seluruh daftar produk dari tabel PostgreSQL <code class="font-mono text-blue-600">products</code>.</p>
         </div>
-        <p class="text-xs text-slate-500 leading-relaxed">
-          Mengembalikan data 3 paket layanan cucian kiloan resmi (<code class="text-blue-700 font-semibold">Cuci Reguler</code>, <code class="text-blue-700 font-semibold">Cuci Kilat</code>, <code class="text-blue-700 font-semibold">Cuci Ekspress</code>) yang dikelola melalui Model backend (<code class="font-mono text-slate-600">productModel.js</code>).
-        </p>
+        <div class="bg-slate-900 rounded-xl p-3 text-[11px] font-mono text-sky-400 overflow-x-auto">
+          Response: Array JSON [...]
+        </div>
+      </div>
+
+      <!-- 3. GET /api/produk/:id -->
+      <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-card space-y-3 flex flex-col justify-between">
+        <div class="space-y-2">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+            <div class="flex items-center space-x-2">
+              <span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 font-mono font-bold text-xs rounded border border-emerald-300">GET</span>
+              <code class="font-mono font-bold text-slate-900 text-xs">/api/produk/:id</code>
+            </div>
+            <a href="/api/produk/1" target="_blank" class="px-2.5 py-1 bg-slate-100 hover:bg-blue-50 hover:text-blue-700 text-slate-700 rounded-lg text-[11px] font-bold transition border border-slate-200">
+              Contoh :1 ↗
+            </a>
+          </div>
+          <p class="text-xs text-slate-600">Mengambil detail 1 produk spesifik berdasarkan Primary Key ID dari PostgreSQL.</p>
+        </div>
+        <div class="bg-slate-900 rounded-xl p-3 text-[11px] font-mono text-sky-400 overflow-x-auto">
+          Response: JSON Object { data: { id, nama, ... } }
+        </div>
+      </div>
+
+      <!-- 4. POST /api/produk -->
+      <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-card space-y-3 flex flex-col justify-between">
+        <div class="space-y-2">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+            <div class="flex items-center space-x-2">
+              <span class="px-2 py-0.5 bg-blue-100 text-blue-800 font-mono font-bold text-xs rounded border border-blue-300">POST</span>
+              <code class="font-mono font-bold text-slate-900 text-xs">/api/produk</code>
+            </div>
+            <span class="text-[10px] font-black text-blue-700 bg-blue-50 px-2 py-0.5 rounded">CREATE</span>
+          </div>
+          <p class="text-xs text-slate-600">Menambahkan data paket laundry baru ke dalam database PostgreSQL.</p>
+        </div>
+        <div class="bg-slate-900 rounded-xl p-3 text-[10px] font-mono text-amber-400 overflow-x-auto">
+          Body: { "nama": "Cuci Karpet", "harga": 20000, "satuan": "meter" }
+        </div>
+      </div>
+
+      <!-- 5. PUT /api/produk/:id -->
+      <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-card space-y-3 flex flex-col justify-between">
+        <div class="space-y-2">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+            <div class="flex items-center space-x-2">
+              <span class="px-2 py-0.5 bg-amber-100 text-amber-800 font-mono font-bold text-xs rounded border border-amber-300">PUT</span>
+              <code class="font-mono font-bold text-slate-900 text-xs">/api/produk/:id</code>
+            </div>
+            <span class="text-[10px] font-black text-amber-700 bg-amber-50 px-2 py-0.5 rounded">UPDATE</span>
+          </div>
+          <p class="text-xs text-slate-600">Memperbarui informasi nama, harga, atau durasi produk di database PostgreSQL.</p>
+        </div>
+        <div class="bg-slate-900 rounded-xl p-3 text-[10px] font-mono text-amber-400 overflow-x-auto">
+          Body: { "nama": "Cuci Reguler Plus", "harga": 8000 }
+        </div>
+      </div>
+
+      <!-- 6. DELETE /api/produk/:id -->
+      <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-card space-y-3 flex flex-col justify-between">
+        <div class="space-y-2">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+            <div class="flex items-center space-x-2">
+              <span class="px-2 py-0.5 bg-rose-100 text-rose-800 font-mono font-bold text-xs rounded border border-rose-300">DELETE</span>
+              <code class="font-mono font-bold text-slate-900 text-xs">/api/produk/:id</code>
+            </div>
+            <span class="text-[10px] font-black text-rose-700 bg-rose-50 px-2 py-0.5 rounded">DELETE</span>
+          </div>
+          <p class="text-xs text-slate-600">Menghapus data produk secara permanen dari database PostgreSQL.</p>
+        </div>
+        <div class="bg-slate-900 rounded-xl p-3 text-[10px] font-mono text-rose-400 overflow-x-auto">
+          Response: { "status": "success", "message": "Produk berhasil dihapus" }
+        </div>
       </div>
     </div>
   </main>

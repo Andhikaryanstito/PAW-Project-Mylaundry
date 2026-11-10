@@ -269,6 +269,95 @@
 
       </div>
 
+      <!-- ======================================================== -->
+      <!-- SECTION: MANAJEMEN LAYANAN LAUNDRY (CRUD DATABASE POSTGRESQL) -->
+      <!-- ======================================================== -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-card overflow-hidden">
+        
+        <div class="p-5 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50/70">
+          <div>
+            <div class="flex items-center space-x-2">
+              <h3 class="font-black text-sm text-slate-900 tracking-tight">Katalog Layanan Laundry (CRUD Database PostgreSQL)</h3>
+              <span class="px-2 py-0.5 rounded text-[10px] font-black bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center space-x-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span>PostgreSQL `mylaundry`</span>
+              </span>
+            </div>
+            <p class="text-xs text-slate-600 mt-0.5 font-medium">
+              Data tersinkron langsung ke tabel <code class="font-mono text-blue-700 bg-blue-50 px-1 py-0.5 rounded font-bold">products</code>. Mendukung operasi <strong>Tambah (Create)</strong>, <strong>Tampil (Read)</strong>, <strong>Ubah (Update)</strong>, dan <strong>Hapus (Delete)</strong>.
+            </p>
+          </div>
+
+          <button type="button" onclick="openAddProductModal()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-black transition flex items-center space-x-1.5 shadow-sm flex-shrink-0 self-start sm:self-auto cursor-pointer">
+            <span>+ Tambah Layanan Baru</span>
+          </button>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-100/90 text-slate-700 font-extrabold uppercase tracking-wider text-[11px] border-b border-slate-200">
+              <tr>
+                <th class="py-3 px-4 w-12 text-center">ID</th>
+                <th class="py-3 px-4">Layanan / Paket</th>
+                <th class="py-3 px-4">Kategori</th>
+                <th class="py-3 px-4">Harga / Tarif</th>
+                <th class="py-3 px-4">Estimasi Waktu</th>
+                <th class="py-3 px-4">Badge</th>
+                <th class="py-3 px-4 text-center">Aksi CRUD</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 font-medium">
+              <% products.forEach((pkg) => { %>
+                <tr class="hover:bg-slate-50/80 transition" id="row-product-<%= pkg.id %>">
+                  <td class="py-3 px-4 text-center font-mono font-bold text-slate-500"><%= pkg.id %></td>
+                  <td class="py-3 px-4">
+                    <div class="flex items-center space-x-2.5">
+                      <span class="text-xl"><%= pkg.icon || '🧺' %></span>
+                      <div>
+                        <p class="font-black text-slate-900 leading-tight"><%= pkg.nama %></p>
+                        <p class="text-[10px] text-slate-500 font-mono mt-0.5"><%= pkg.kode %></p>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="py-3 px-4">
+                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200">
+                      <%= pkg.kategori || 'Kiloan' %>
+                    </span>
+                  </td>
+                  <td class="py-3 px-4 font-mono font-black text-blue-800 text-sm">
+                    <%= formatCurrency(pkg.harga) %><span class="text-[10px] font-normal text-slate-500">/<%= pkg.satuan || 'kg' %></span>
+                  </td>
+                  <td class="py-3 px-4 text-slate-700 font-bold">
+                    <%= pkg.durasi_label || (pkg.estimasi_jam + ' Jam') %>
+                  </td>
+                  <td class="py-3 px-4">
+                    <% if (pkg.badge) { %>
+                      <span class="px-2 py-0.5 rounded text-[10px] font-black bg-blue-100 text-blue-900 border border-blue-200">
+                        <%= pkg.badge %>
+                      </span>
+                    <% } else { %>
+                      <span class="text-slate-400 text-[11px]">-</span>
+                    <% } %>
+                  </td>
+                  <td class="py-3 px-4 text-center whitespace-nowrap">
+                    <div class="flex items-center justify-center space-x-1.5">
+                      <!-- Edit Button -->
+                      <button type="button" onclick='openEditProductModal(<%= JSON.stringify(pkg) %>)' title="Edit Layanan (Update)" class="px-2.5 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-800 rounded-lg text-xs font-bold transition border border-amber-200 flex items-center space-x-1 shadow-2xs cursor-pointer">
+                        <span>✏️ Edit</span>
+                      </button>
+                      <!-- Delete Button -->
+                      <button type="button" onclick="confirmDeleteProduct(<%= pkg.id %>, '<%= pkg.nama %>')" title="Hapus Layanan (Delete)" class="px-2.5 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-800 rounded-lg text-xs font-bold transition border border-rose-200 flex items-center space-x-1 shadow-2xs cursor-pointer">
+                        <span>🗑️ Hapus</span>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
     </div>
 
 
@@ -319,11 +408,16 @@
             </div>
           </div>
 
-          <!-- SECTION 2: PAKET LAYANAN DARI MODEL BACKEND (3 PAKET RESMI) -->
+          <!-- SECTION 2: PAKET LAYANAN DARI DATABASE POSTGRESQL -->
           <div class="space-y-4 pt-4 border-t border-slate-200">
             <div class="flex items-center justify-between">
-              <label class="block text-xs font-black text-slate-500 uppercase tracking-wider">2. Paket Layanan Cucian</label>
-              <span class="text-[11px] text-blue-800 font-bold">Tersinkron dari `productModel.js` (<%= products.length %> Paket)</span>
+              <div class="flex items-center space-x-2">
+                <label class="block text-xs font-black text-slate-500 uppercase tracking-wider">2. Paket Layanan Cucian</label>
+                <span class="text-[11px] text-blue-800 font-bold">PostgreSQL (<%= products.length %> Layanan)</span>
+              </div>
+              <button type="button" onclick="openAddProductModal()" class="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-extrabold transition flex items-center space-x-1 shadow-xs cursor-pointer">
+                <span>+ Tambah Layanan</span>
+              </button>
             </div>
 
             <!-- Grid 3 Paket Layanan (Sesuai PRD F-01 & Figma) -->
@@ -340,9 +434,19 @@
                   <div class="text-2xl mb-1.5"><%= pkg.icon %></div>
                   <p class="text-xs font-black text-slate-900 leading-tight"><%= pkg.nama %></p>
                   <p class="text-[11px] text-slate-600 font-medium mt-0.5"><%= pkg.durasi_label %></p>
-                  <p class="text-sm font-black text-blue-800 mt-2 font-mono">
-                    <%= formatCurrency(pkg.harga) %><span class="text-[10px] font-normal text-slate-500">/<%= pkg.satuan %></span>
-                  </p>
+                  <div class="flex items-center justify-between mt-2 pt-2 border-t border-slate-100">
+                    <p class="text-sm font-black text-blue-800 font-mono">
+                      <%= formatCurrency(pkg.harga) %><span class="text-[10px] font-normal text-slate-500">/<%= pkg.satuan %></span>
+                    </p>
+                    <div class="flex items-center space-x-1" onclick="event.stopPropagation()">
+                      <button type="button" onclick='openEditProductModal(<%= JSON.stringify(pkg) %>)' title="Edit Layanan" class="p-1 rounded-md bg-slate-100 hover:bg-amber-100 text-slate-600 hover:text-amber-800 transition text-[11px] cursor-pointer">
+                        ✏️
+                      </button>
+                      <button type="button" onclick="confirmDeleteProduct(<%= pkg.id %>, '<%= pkg.nama %>')" title="Hapus Layanan" class="p-1 rounded-md bg-slate-100 hover:bg-rose-100 text-slate-600 hover:text-rose-800 transition text-[11px] cursor-pointer">
+                        🗑️
+                      </button>
+                    </div>
+                  </div>
                 </div>
               <% }) %>
             </div>
@@ -476,44 +580,129 @@
         </button>
       </div>
 
-      <!-- Endpoint Cards -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <!-- Suite Endpoint CRUD Week 8 (PostgreSQL) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         
-        <!-- API 1: GET /api/status -->
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-card p-5 space-y-3">
-          <div class="flex items-center justify-between pb-2 border-b border-slate-200">
-            <div class="flex items-center space-x-2 font-mono text-xs">
-              <span class="px-2 py-0.5 bg-emerald-100 text-emerald-900 font-black rounded border border-emerald-300">GET</span>
-              <code class="font-extrabold text-slate-900">/api/status</code>
+        <!-- 1. GET /api/status -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-card p-5 space-y-3 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between pb-2 border-b border-slate-200">
+              <div class="flex items-center space-x-2 font-mono text-xs">
+                <span class="px-2 py-0.5 bg-emerald-100 text-emerald-900 font-black rounded border border-emerald-300">GET</span>
+                <code class="font-extrabold text-slate-900">/api/status</code>
+              </div>
+              <button onclick="testApiEndpoint('/api/status', 'response-status')" class="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold transition shadow-xs cursor-pointer">
+                ▶ Uji
+              </button>
             </div>
-            <button onclick="testApiEndpoint('/api/status', 'response-status')" class="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold transition shadow-xs">
-              ▶ Uji Request
-            </button>
+            <p class="text-[11px] text-slate-600 font-medium mt-1">Status server &amp; status koneksi PostgreSQL.</p>
           </div>
-          <p class="text-xs text-slate-600 font-medium">
-            Mengirimkan status server, uptime, memory, dan identitas toko dalam format JSON.
-          </p>
-          <div class="bg-slate-900 border border-slate-800 rounded-xl p-3.5 text-emerald-400 font-mono text-xs overflow-x-auto max-h-56" id="response-status">
-            // Klik tombol "Uji Request" di atas...
+          <div class="bg-slate-900 rounded-xl p-3 text-emerald-400 font-mono text-[11px] overflow-x-auto max-h-40" id="response-status">
+            // Klik tombol "Uji" di atas...
           </div>
         </div>
 
-        <!-- API 2: GET /api/produk -->
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-card p-5 space-y-3">
-          <div class="flex items-center justify-between pb-2 border-b border-slate-200">
-            <div class="flex items-center space-x-2 font-mono text-xs">
-              <span class="px-2 py-0.5 bg-emerald-100 text-emerald-900 font-black rounded border border-emerald-300">GET</span>
-              <code class="font-extrabold text-slate-900">/api/produk</code>
+        <!-- 2. GET /api/produk -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-card p-5 space-y-3 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between pb-2 border-b border-slate-200">
+              <div class="flex items-center space-x-2 font-mono text-xs">
+                <span class="px-2 py-0.5 bg-emerald-100 text-emerald-900 font-black rounded border border-emerald-300">GET</span>
+                <code class="font-extrabold text-slate-900">/api/produk</code>
+              </div>
+              <button onclick="testApiEndpoint('/api/produk', 'response-produk')" class="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold transition shadow-xs cursor-pointer">
+                ▶ Uji
+              </button>
             </div>
-            <button onclick="testApiEndpoint('/api/produk', 'response-produk')" class="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold transition shadow-xs">
-              ▶ Uji Request
-            </button>
+            <p class="text-[11px] text-slate-600 font-medium mt-1">Mengambil semua data produk dari PostgreSQL (Array JSON).</p>
           </div>
-          <p class="text-xs text-slate-600 font-medium">
-            Mengirimkan array JSON 3 data produk/layanan laundry yang dikelola melalui Model backend.
-          </p>
-          <div class="bg-slate-900 border border-slate-800 rounded-xl p-3.5 text-blue-300 font-mono text-xs overflow-x-auto max-h-56" id="response-produk">
-            // Klik tombol "Uji Request" di atas...
+          <div class="bg-slate-900 rounded-xl p-3 text-sky-400 font-mono text-[11px] overflow-x-auto max-h-40" id="response-produk">
+            // Klik tombol "Uji" di atas...
+          </div>
+        </div>
+
+        <!-- 3. GET /api/produk/:id -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-card p-5 space-y-3 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between pb-2 border-b border-slate-200">
+              <div class="flex items-center space-x-2 font-mono text-xs">
+                <span class="px-2 py-0.5 bg-emerald-100 text-emerald-900 font-black rounded border border-emerald-300">GET</span>
+                <code class="font-extrabold text-slate-900">/api/produk/:id</code>
+              </div>
+              <div class="flex items-center space-x-1">
+                <input type="number" id="test-get-id" value="1" min="1" class="w-12 px-2 py-1 text-xs border border-slate-300 rounded font-mono text-center">
+                <button onclick="testApiEndpoint('/api/produk/' + document.getElementById('test-get-id').value, 'response-get-id')" class="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold transition shadow-xs cursor-pointer">
+                  ▶ Uji
+                </button>
+              </div>
+            </div>
+            <p class="text-[11px] text-slate-600 font-medium mt-1">Detail 1 produk berdasarkan Primary Key ID dari PostgreSQL.</p>
+          </div>
+          <div class="bg-slate-900 rounded-xl p-3 text-sky-400 font-mono text-[11px] overflow-x-auto max-h-40" id="response-get-id">
+            // Masukkan ID dan klik "Uji"...
+          </div>
+        </div>
+
+        <!-- 4. POST /api/produk -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-card p-5 space-y-3 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between pb-2 border-b border-slate-200">
+              <div class="flex items-center space-x-2 font-mono text-xs">
+                <span class="px-2 py-0.5 bg-blue-100 text-blue-900 font-black rounded border border-blue-300">POST</span>
+                <code class="font-extrabold text-slate-900">/api/produk</code>
+              </div>
+              <button onclick="testApiPost()" class="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold transition shadow-xs cursor-pointer">
+                ▶ Uji Tambah
+              </button>
+            </div>
+            <p class="text-[11px] text-slate-600 font-medium mt-1">Uji POST data baru (misal: Cuci Helm) ke PostgreSQL.</p>
+          </div>
+          <div class="bg-slate-900 rounded-xl p-3 text-amber-400 font-mono text-[11px] overflow-x-auto max-h-40" id="response-post">
+            // Klik "Uji Tambah" di atas...
+          </div>
+        </div>
+
+        <!-- 5. PUT /api/produk/:id -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-card p-5 space-y-3 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between pb-2 border-b border-slate-200">
+              <div class="flex items-center space-x-2 font-mono text-xs">
+                <span class="px-2 py-0.5 bg-amber-100 text-amber-900 font-black rounded border border-amber-300">PUT</span>
+                <code class="font-extrabold text-slate-900">/api/produk/:id</code>
+              </div>
+              <div class="flex items-center space-x-1">
+                <input type="number" id="test-put-id" value="1" min="1" class="w-12 px-2 py-1 text-xs border border-slate-300 rounded font-mono text-center">
+                <button onclick="testApiPut()" class="px-3 py-1 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-bold transition shadow-xs cursor-pointer">
+                  ▶ Uji Edit
+                </button>
+              </div>
+            </div>
+            <p class="text-[11px] text-slate-600 font-medium mt-1">Uji PUT ubah harga produk ID terpilih di PostgreSQL.</p>
+          </div>
+          <div class="bg-slate-900 rounded-xl p-3 text-amber-400 font-mono text-[11px] overflow-x-auto max-h-40" id="response-put">
+            // Masukkan ID dan klik "Uji Edit"...
+          </div>
+        </div>
+
+        <!-- 6. DELETE /api/produk/:id -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-card p-5 space-y-3 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between pb-2 border-b border-slate-200">
+              <div class="flex items-center space-x-2 font-mono text-xs">
+                <span class="px-2 py-0.5 bg-rose-100 text-rose-900 font-black rounded border border-rose-300">DELETE</span>
+                <code class="font-extrabold text-slate-900">/api/produk/:id</code>
+              </div>
+              <div class="flex items-center space-x-1">
+                <input type="number" id="test-del-id" placeholder="ID" class="w-12 px-2 py-1 text-xs border border-slate-300 rounded font-mono text-center">
+                <button onclick="testApiDelete()" class="px-3 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs cursor-pointer">
+                  ▶ Uji Hapus
+                </button>
+              </div>
+            </div>
+            <p class="text-[11px] text-slate-600 font-medium mt-1">Uji DELETE produk ID terpilih dari PostgreSQL.</p>
+          </div>
+          <div class="bg-slate-900 rounded-xl p-3 text-rose-400 font-mono text-[11px] overflow-x-auto max-h-40" id="response-delete">
+            // Masukkan ID dan klik "Uji Hapus"...
           </div>
         </div>
 
@@ -732,6 +921,7 @@ Pesan ini dikirim otomatis oleh MyLaundry AI. Terima kasih! 🙏
 
   <!-- MODAL NOTA DIGITAL & FOOTER -->
   <%- include('partials/receiptModal') %>
+  <%- include('partials/productModals') %>
   <%- include('partials/footer') %>
 
 </div>
@@ -1268,7 +1458,7 @@ Perkiraan waktu siap ambil kami sesuaikan menjadi jam 18:00 WIB ya Kak. Mohon ma
     appendChatMessage('bot', reply);
   }
 
-  // UJI REST API DI TAB 3
+  // UJI REST API DI TAB 3 (SUITE CRUD WEEK 8)
   async function testApiEndpoint(endpoint, containerId) {
     const container = document.getElementById(containerId);
     container.textContent = 'Mengirim request ke ' + endpoint + '...';
@@ -1278,6 +1468,70 @@ Perkiraan waktu siap ambil kami sesuaikan menjadi jam 18:00 WIB ya Kak. Mohon ma
       container.textContent = JSON.stringify(data, null, 2);
     } catch (err) {
       container.textContent = 'Gagal memuat API: ' + err.message;
+    }
+  }
+
+  async function testApiPost() {
+    const container = document.getElementById('response-post');
+    container.textContent = 'Mengirim POST request ke /api/produk...';
+    try {
+      const payload = {
+        nama: 'Cuci Helm & Aksesoris ' + Math.floor(Math.random() * 100),
+        kategori: 'Treatment',
+        harga: 25000,
+        satuan: 'pcs',
+        estimasi_jam: 24,
+        durasi_label: '1 Hari (24 Jam)',
+        icon: '🪖',
+        deskripsi: 'Pembersihan helm deep clean anti bakteri dan pewangi segar.'
+      };
+      const res = await fetch('/api/produk', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      container.textContent = JSON.stringify(data, null, 2);
+    } catch (err) {
+      container.textContent = 'Error: ' + err.message;
+    }
+  }
+
+  async function testApiPut() {
+    const id = document.getElementById('test-put-id').value;
+    const container = document.getElementById('response-put');
+    container.textContent = 'Mengirim PUT request ke /api/produk/' + id + '...';
+    try {
+      const payload = {
+        harga: 7500 + Math.floor(Math.random() * 1000),
+        badge: 'Harga Update ' + new Date().toLocaleTimeString('id-ID')
+      };
+      const res = await fetch('/api/produk/' + id, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      container.textContent = JSON.stringify(data, null, 2);
+    } catch (err) {
+      container.textContent = 'Error: ' + err.message;
+    }
+  }
+
+  async function testApiDelete() {
+    const id = document.getElementById('test-del-id').value;
+    const container = document.getElementById('response-delete');
+    if (!id) {
+      container.textContent = 'Silakan isi ID produk terlebih dahulu.';
+      return;
+    }
+    container.textContent = 'Mengirim DELETE request ke /api/produk/' + id + '...';
+    try {
+      const res = await fetch('/api/produk/' + id, { method: 'DELETE' });
+      const data = await res.json();
+      container.textContent = JSON.stringify(data, null, 2);
+    } catch (err) {
+      container.textContent = 'Error: ' + err.message;
     }
   }
 
