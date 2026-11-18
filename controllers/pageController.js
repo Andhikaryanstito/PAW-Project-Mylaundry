@@ -18,9 +18,9 @@ class PageController {
   static async getHomePage(req, res) {
     try {
       const products = await ProductModel.getAll();
-      const orders = OrderModel.getAll();
+      const orders = await OrderModel.getAllFromDb();
       const stats = OrderModel.getStats();
-      const customers = CustomerModel.getAll();
+      const customers = await CustomerModel.getAllFromDb();
 
       res.render('index', {
         title: 'MyLaundry POS - Website Kasir UMKM Laundry',

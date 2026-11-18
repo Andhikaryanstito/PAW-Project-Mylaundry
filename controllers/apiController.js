@@ -258,7 +258,7 @@ class ApiController {
       const numWeight = parseFloat(weight) || 1;
       const totalPrice = Math.round(numWeight * (product ? product.harga : 7000));
 
-      const newOrder = OrderModel.create({
+      const newOrder = await OrderModel.create({
         name,
         phone,
         packageCode: product ? product.kode : 'reguler',
@@ -285,7 +285,7 @@ class ApiController {
   /**
    * Endpoint Tambahan: PATCH /api/pesanan/:id/status
    */
-  static updateStatus(req, res) {
+  static async updateStatus(req, res) {
     const { id } = req.params;
     const { status } = req.body;
 
@@ -296,7 +296,7 @@ class ApiController {
       });
     }
 
-    const updated = OrderModel.updateStatus(id, status);
+    const updated = await OrderModel.updateStatus(id, status);
     if (!updated) {
       return res.status(404).json({
         status: 'error',

@@ -1,124 +1,134 @@
-<!-- SIDEBAR VERTICAL KIRI (STANDAR POS KASIR PROFESIONAL & WIREFRAME FIGMA) -->
-<aside class="w-64 bg-white border-r border-slate-300/80 flex-shrink-0 flex flex-col justify-between sticky top-0 h-screen z-30 select-none shadow-xs">
+<!-- SIDEBAR VERTICAL KIRI (FRESH ECO-CLEAN THEME - MYLAUNDRY POS) -->
+<aside class="w-64 bg-white border-r border-stone-200 flex-shrink-0 flex flex-col justify-between sticky top-0 h-screen z-30 select-none shadow-xs font-sans">
   
   <!-- BAGIAN ATAS: LOGO & BRAND -->
   <div>
     <!-- Brand Header -->
-    <div class="px-6 py-5 border-b border-slate-200 flex items-center space-x-3 bg-white">
-      <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-sm font-bold text-xl">
+    <div class="px-5 py-4 border-b border-stone-200 flex items-center space-x-3 bg-stone-50/50">
+      <div class="w-9 h-9 rounded-xl bg-teal-800 flex items-center justify-center text-white shadow-xs font-bold text-lg">
         🧺
       </div>
       <div>
-        <h1 class="text-base font-black tracking-tight text-slate-900 leading-none">
-          MyLaundry <span class="text-blue-600">POS</span>
+        <h1 class="text-sm font-extrabold tracking-tight text-stone-900 leading-none">
+          MyLaundry <span class="text-teal-700 font-black">POS</span>
         </h1>
-        <div class="flex items-center space-x-1.5 text-[11px] text-slate-600 font-semibold mt-1">
-          <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span class="text-emerald-700 font-bold">Toko Buka</span>
-          <span class="text-slate-300">•</span>
-          <span>Bantul</span>
+        <div class="flex items-center space-x-1.5 text-[10px] text-stone-500 font-medium mt-1">
+          <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+          <span class="text-emerald-800 font-bold">Cabang Bantul</span>
+          <span class="text-stone-300">•</span>
+          <span>Shift Buka</span>
         </div>
       </div>
     </div>
 
-    <!-- Menu Navigasi Utama (Solid Active State Sesuai Figma) -->
-    <nav class="p-3.5 space-y-1.5">
-      <div class="px-3 py-1.5 text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">
-        Menu Kasir
+    <!-- Menu Navigasi Utama -->
+    <nav class="p-3 space-y-1 text-xs">
+      <div class="px-3 py-1.5 text-[10px] font-bold text-stone-400 uppercase tracking-wider">
+        Operasional Kasir
       </div>
 
-      <!-- Nav 1: Dashboard (Solid Blue Sesuai Tombol Utama) -->
-      <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-tab w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-bold transition text-white bg-blue-600 shadow-sm hover:bg-blue-700">
-        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+      <!-- Nav 1: Dashboard Antrean -->
+      <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-tab w-full flex items-center space-x-2.5 px-3.5 py-2.5 rounded-xl font-bold transition text-white bg-teal-800 shadow-xs hover:bg-teal-900">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
         </svg>
-        <span>Dashboard</span>
+        <span>Antrean Cucian</span>
       </button>
 
-      <!-- Nav 2: Transaksi Baru -->
-      <button onclick="switchTab('transaksi')" id="nav-transaksi" class="nav-tab w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-bold transition text-slate-700 hover:text-blue-800 hover:bg-blue-50/70 border border-transparent">
-        <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
+      <!-- Nav 2: Transaksi Baru (POS Meja Kasir) -->
+      <button onclick="switchTab('transaksi')" id="nav-transaksi" class="nav-tab w-full flex items-center space-x-2.5 px-3.5 py-2.5 rounded-xl font-bold transition text-stone-700 hover:text-teal-900 hover:bg-stone-100 border border-transparent">
+        <svg class="w-4 h-4 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
         </svg>
         <span>Transaksi Baru</span>
       </button>
 
-      <!-- Nav 3: Status Cucian -->
-      <button onclick="switchTab('status')" id="nav-status" class="nav-tab w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-bold transition text-slate-700 hover:text-blue-800 hover:bg-blue-50/70 border border-transparent">
-        <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+      <!-- Nav 3: Status Cucian & Nota -->
+      <button onclick="switchTab('status')" id="nav-status" class="nav-tab w-full flex items-center space-x-2.5 px-3.5 py-2.5 rounded-xl font-bold transition text-stone-700 hover:text-teal-900 hover:bg-stone-100 border border-transparent">
+        <svg class="w-4 h-4 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
         </svg>
-        <span>Status Cucian</span>
+        <span>Status &amp; Kirim Nota</span>
       </button>
 
-      <!-- Nav 4: AI Assistant (Tugas Week 9 - Google Gemini) -->
-      <button onclick="switchTab('ai-assistant')" id="nav-ai-assistant" class="nav-tab w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-bold transition text-slate-700 hover:text-blue-800 hover:bg-blue-50/70 border border-transparent">
-        <div class="flex items-center space-x-3">
-          <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+      <!-- Nav 4: AI Assistant (Google Gemini LLM) -->
+      <button onclick="switchTab('ai-assistant')" id="nav-ai-assistant" class="nav-tab w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl font-bold transition text-stone-700 hover:text-teal-900 hover:bg-stone-100 border border-transparent">
+        <div class="flex items-center space-x-2.5">
+          <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
           </svg>
-          <span>AI Assistant</span>
+          <span>Sarah AI</span>
         </div>
-        <span class="text-[9px] font-black text-purple-800 bg-purple-100 px-2 py-0.5 rounded-md border border-purple-300">Gemini</span>
+        <span class="text-[9px] font-bold text-teal-800 bg-teal-50 px-1.5 py-0.5 rounded border border-teal-200">Gemini</span>
       </button>
 
-      <!-- Nav 5: Pelanggan -->
-      <button onclick="showFeatureAlert('Data Pelanggan tersinkron otomatis saat kasir menginput nomor WhatsApp!')" class="w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-bold text-slate-700 hover:text-blue-800 hover:bg-blue-50/70 transition border border-transparent">
-        <div class="flex items-center space-x-3">
-          <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+      <div class="pt-3 px-3 py-1.5 text-[10px] font-bold text-stone-400 uppercase tracking-wider">
+        Kelola Toko
+      </div>
+
+      <!-- Nav 5: Manajemen Pelanggan (CRM) -->
+      <button onclick="switchTab('pelanggan')" id="nav-pelanggan" class="nav-tab w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl font-bold transition text-stone-700 hover:text-teal-900 hover:bg-stone-100 border border-transparent">
+        <div class="flex items-center space-x-2.5">
+          <svg class="w-4 h-4 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
           </svg>
           <span>Pelanggan</span>
         </div>
-        <span class="text-[10px] font-extrabold text-blue-800 bg-blue-100 px-2 py-0.5 rounded border border-blue-300">Auto</span>
+        <span class="text-[9px] font-semibold text-stone-500 bg-stone-100 px-1.5 py-0.5 rounded border border-stone-200">CRM</span>
       </button>
 
-      <!-- Nav 5: Pengaturan -->
-      <button onclick="showFeatureAlert('Pengaturan Toko: Cabang Bantul, Database PostgreSQL mylaundry.')" class="w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-bold text-slate-700 hover:text-blue-800 hover:bg-blue-50/70 transition border border-transparent">
-        <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+      <!-- Nav 6: Pengaturan & Status Sistem -->
+      <button onclick="switchTab('pengaturan')" id="nav-pengaturan" class="nav-tab w-full flex items-center space-x-2.5 px-3.5 py-2.5 rounded-xl font-bold transition text-stone-700 hover:text-teal-900 hover:bg-stone-100 border border-transparent">
+        <svg class="w-4 h-4 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
         </svg>
-        <span>Pengaturan</span>
+        <span>Pengaturan Toko</span>
       </button>
     </nav>
   </div>
 
-  <!-- BAGIAN BAWAH: DEVELOPER WEEK 8 & PROFIL KASIR -->
-  <div class="p-3.5 border-t border-slate-200 bg-slate-50/50 space-y-3">
+  <!-- BAGIAN BAWAH: STATUS INFRASTRUKTUR & PROFIL KASIR -->
+  <div class="p-3 border-t border-stone-200 bg-stone-50/70 space-y-2.5">
     
-    <!-- Box Khusus Dosen/Asdos: Uji REST API Week 8 -->
-    <div class="bg-white border border-slate-200 rounded-xl p-3 shadow-2xs">
-      <div class="flex items-center justify-between text-[11px] font-extrabold text-slate-500 mb-1.5">
-        <span>TUGAS WEEK 8 (CRUD DB)</span>
-        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" title="PostgreSQL Aktif"></span>
-      </div>
-      <button onclick="switchTab('api-tester')" id="nav-api-tester" class="nav-tab w-full text-left px-3 py-2 rounded-lg text-xs font-extrabold text-blue-800 bg-blue-50 hover:bg-blue-100 border border-blue-200 transition flex items-center justify-between">
-        <span class="flex items-center space-x-1.5">
-          <span>🧪</span>
-          <span>Uji REST API</span>
+    <!-- Status Ringkas PostgreSQL & Rest API -->
+    <div class="bg-white border border-stone-200 rounded-xl p-2.5 shadow-2xs">
+      <div class="flex items-center justify-between text-[10px] font-bold text-stone-500 mb-1">
+        <span class="flex items-center space-x-1">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+          <span>PostgreSQL Active</span>
         </span>
-        <span class="text-[10px] text-blue-600 font-mono">/api/* →</span>
+        <span class="text-stone-400 font-mono text-[9px]">v16</span>
+      </div>
+      <button onclick="switchTab('api-tester')" id="nav-api-tester" class="nav-tab w-full text-left px-2 py-1.5 rounded-lg text-[11px] font-bold text-stone-700 bg-stone-50 hover:bg-stone-100 border border-stone-200 transition flex items-center justify-between">
+        <span>🧪 Tester Endpoint API</span>
+        <span class="text-[9px] text-teal-700 font-mono font-bold">/api/*</span>
       </button>
     </div>
 
-    <!-- Profil Kasir Sarah -->
-    <div class="flex items-center justify-between px-2 py-1">
-      <div class="flex items-center space-x-2.5 min-w-0">
-        <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-extrabold text-xs flex-shrink-0 shadow-2xs">
+    <!-- Profil Pengguna / Kasir (Membedakan Admin vs Sarah) -->
+    <div class="flex items-center justify-between px-1.5 py-0.5">
+      <div class="flex items-center space-x-2 min-w-0">
+        <div class="w-8 h-8 rounded-full <%= (currentUser && currentUser.username === 'admin') ? 'bg-amber-600' : 'bg-teal-800' %> text-white flex items-center justify-center font-bold text-xs flex-shrink-0 shadow-2xs">
           <%= currentUser ? (currentUser.avatar || 'SA') : 'SA' %>
         </div>
         <div class="min-w-0">
-          <p class="text-xs font-extrabold text-slate-900 truncate">
-            <%= currentUser ? currentUser.name : 'Sarah Anggraini' %>
-          </p>
-          <p class="text-[10px] font-semibold text-slate-500 truncate">
-            <%= currentUser ? currentUser.role : 'Kasir & Pemilik' %>
-          </p>
+          <div class="flex items-center space-x-1.5">
+            <p class="text-xs font-bold text-stone-900 truncate">
+              <%= currentUser ? currentUser.name : 'Sarah Anggraini' %>
+            </p>
+          </div>
+          <div class="flex items-center space-x-1 mt-0.5">
+            <% if (currentUser && currentUser.username === 'admin') { %>
+              <span class="text-[9px] font-bold text-amber-800 bg-amber-100 px-1.5 py-0.2 rounded border border-amber-300">Admin Master</span>
+            <% } else { %>
+              <span class="text-[9px] font-bold text-teal-800 bg-teal-100 px-1.5 py-0.2 rounded border border-teal-300">Kasir Toko</span>
+            <% } %>
+          </div>
         </div>
       </div>
       <!-- Tombol Logout -->
-      <a href="/logout" title="Keluar / Ganti Akun Kasir" class="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition">
+      <a href="/logout" title="Keluar dari Shift Kasir" class="p-1.5 text-stone-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
         </svg>

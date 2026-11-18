@@ -1,12 +1,14 @@
 /**
- * Model Antrean & Pesanan Laundry (OrderModel)
- * Digunakan untuk manajemen antrean kasir dan status cucian toko
+ * Model Antrean & Pesanan Laundry (OrderModel - PostgreSQL Connected)
+ * Mengelola antrean kasir dan status cucian toko langsung ke tabel `orders` di PostgreSQL
+ * Penulis: Andhika Ryan Stito (20240140263) - Kelas D
  */
 
-const { formatDateTime, calculateReadyTime } = require('../utils/formatter');
+const db = require('../config/database');
+const { formatDateTime } = require('../utils/formatter');
 
-// In-memory array data pesanan laundry sesuai PRD studi kasus Mbak Sarah
-let orders = [
+// In-memory cache yang otomatis disinkronkan dari database PostgreSQL
+let cachedOrders = [
   {
     id: '#ORD-102',
     name: 'Budi Santoso',
@@ -17,163 +19,80 @@ let orders = [
     price: 24500,
     notes: 'Kemeja kantor & celana katun',
     readyTime: 'Hari Ini, 16:00 WIB',
-    status: 'Diproses', // Diproses | Siap Diambil | Menumpuk
-    paymentStatus: 'Lunas',
-    paymentMethod: 'Tunai',
-    createdAt: new Date(Date.now() - 3 * 3600 * 1000).toISOString()
-  },
-  {
-    id: '#ORD-101',
-    name: 'Siti Rahmawati',
-    phone: '085712345678',
-    packageCode: 'kilat',
-    packageName: 'Cuci Kilat',
-    weight: 4.0,
-    price: 40000,
-    notes: 'Gamis & jilbab lembut (pelembut ekstra)',
-    readyTime: 'Hari Ini, 14:00 WIB',
     status: 'Diproses',
     paymentStatus: 'Lunas',
-    paymentMethod: 'QRIS',
-    createdAt: new Date(Date.now() - 6 * 3600 * 1000).toISOString()
-  },
-  {
-    id: '#ORD-100',
-    name: 'Ahmad Fauzi',
-    phone: '082155443322',
-    packageCode: 'reguler',
-    packageName: 'Cuci Reguler',
-    weight: 5.0,
-    price: 35000,
-    notes: 'Kaos & celana pendek santai',
-    readyTime: 'Kemarin, 17:00 WIB',
-    status: 'Siap Diambil',
-    paymentStatus: 'Belum Lunas',
     paymentMethod: 'Tunai',
-    createdAt: new Date(Date.now() - 28 * 3600 * 1000).toISOString()
-  },
-  {
-    id: '#ORD-099',
-    name: 'Ibu Ratna Dewi',
-    phone: '081388990011',
-    packageCode: 'reguler',
-    packageName: 'Cuci Reguler',
-    weight: 6.5,
-    price: 45500,
-    notes: 'Sprei & selimut bulu lembut',
-    readyTime: 'Kemarin, 12:00 WIB',
-    status: 'Siap Diambil',
-    paymentStatus: 'Lunas',
-    paymentMethod: 'QRIS',
-    createdAt: new Date(Date.now() - 32 * 3600 * 1000).toISOString()
-  },
-  {
-    id: '#ORD-098',
-    name: 'Mas Dimas (Kost Putra)',
-    phone: '089698765432',
-    packageCode: 'reguler',
-    packageName: 'Cuci Reguler',
-    weight: 7.2,
-    price: 50400,
-    notes: 'Pakaian futsal & celana jeans tebal',
-    readyTime: '4 Hari Lalu (25 Okt)',
-    status: 'Menumpuk', // > 3 hari belum diambil
-    paymentStatus: 'Belum Lunas',
-    paymentMethod: 'Tunai',
-    createdAt: new Date(Date.now() - 96 * 3600 * 1000).toISOString()
-  },
-  {
-    id: '#ORD-097',
-    name: 'Pak Bambang',
-    phone: '081223344556',
-    packageCode: 'reguler',
-    packageName: 'Cuci Reguler',
-    weight: 4.8,
-    price: 33600,
-    notes: 'Batik & kemeja kerja',
-    readyTime: '5 Hari Lalu (24 Okt)',
-    status: 'Menumpuk', // > 3 hari belum diambil
-    paymentStatus: 'Lunas',
-    paymentMethod: 'Tunai',
-    createdAt: new Date(Date.now() - 120 * 3600 * 1000).toISOString()
-  },
-  {
-    id: '#ORD-096',
-    name: 'Rina Kusuma',
-    phone: '087711223344',
-    packageCode: 'express',
-    packageName: 'Cuci Ekspress',
-    weight: 2.5,
-    price: 37500,
-    notes: 'Blazer dan rok plisket',
-    readyTime: 'Hari Ini, 18:30 WIB',
-    status: 'Diproses',
-    paymentStatus: 'Lunas',
-    paymentMethod: 'QRIS',
-    createdAt: new Date(Date.now() - 2 * 3600 * 1000).toISOString()
-  },
-  {
-    id: '#ORD-095',
-    name: 'Yoga Pratama',
-    phone: '085299887766',
-    packageCode: 'kilat',
-    packageName: 'Cuci Kilat',
-    weight: 3.0,
-    price: 30000,
-    readyTime: 'Hari Ini, 15:00 WIB',
-    status: 'Siap Diambil',
-    paymentStatus: 'Lunas',
-    paymentMethod: 'Tunai',
-    createdAt: new Date(Date.now() - 14 * 3600 * 1000).toISOString()
-  },
-  {
-    id: '#ORD-094',
-    name: 'Lestari Putri',
-    phone: '081900112233',
-    packageCode: 'reguler',
-    packageName: 'Cuci Reguler',
-    weight: 2.8,
-    price: 19600,
-    readyTime: 'Hari Ini, 13:00 WIB',
-    status: 'Siap Diambil',
-    paymentStatus: 'Lunas',
-    paymentMethod: 'QRIS',
-    createdAt: new Date(Date.now() - 20 * 3600 * 1000).toISOString()
-  },
-  {
-    id: '#ORD-093',
-    name: 'Dedi Setiawan',
-    phone: '083812345678',
-    packageCode: 'reguler',
-    packageName: 'Cuci Reguler',
-    weight: 3.2,
-    price: 22400,
-    readyTime: 'Besok, 10:00 WIB',
-    status: 'Diproses',
-    paymentStatus: 'Belum Lunas',
-    paymentMethod: 'Tunai',
-    createdAt: new Date(Date.now() - 1 * 3600 * 1000).toISOString()
+    createdAt: new Date().toISOString()
   }
 ];
 
+// Helper mapping kolom database (snake_case) ke format model (camelCase)
+function mapDbRow(r) {
+  return {
+    id: r.id,
+    name: r.name,
+    phone: r.phone,
+    packageCode: r.package_code || 'reguler',
+    packageName: r.package_name || 'Cuci Reguler',
+    weight: parseFloat(r.weight) || 0,
+    price: parseInt(r.price, 10) || 0,
+    notes: r.notes || '-',
+    readyTime: r.ready_time || 'Hari Ini',
+    status: r.status || 'Diproses',
+    paymentStatus: r.payment_status || 'Lunas',
+    paymentMethod: r.payment_method || 'Tunai',
+    createdAt: r.created_at || new Date().toISOString()
+  };
+}
+
+// Inisialisasi sinkronisasi dari database PostgreSQL saat file dimuat
+(async () => {
+  try {
+    const res = await db.query('SELECT * FROM orders ORDER BY created_at DESC');
+    if (res.rows && res.rows.length > 0) {
+      cachedOrders = res.rows.map(mapDbRow);
+    }
+  } catch (err) {
+    // Gunakan fallback jika tabel belum siap
+  }
+})();
+
 class OrderModel {
+  /**
+   * Mengambil seluruh pesanan dari PostgreSQL
+   */
+  static async getAllFromDb() {
+    try {
+      const res = await db.query('SELECT * FROM orders ORDER BY created_at DESC');
+      if (res.rows && res.rows.length > 0) {
+        cachedOrders = res.rows.map(mapDbRow);
+        return cachedOrders;
+      }
+    } catch (err) {
+      console.warn('[OrderModel] Menggunakan cache:', err.message);
+    }
+    return cachedOrders;
+  }
+
+  /**
+   * Mengambil seluruh pesanan (sinkron cepat / kompatibel)
+   */
   static getAll() {
-    return orders;
+    return cachedOrders;
   }
 
   static getById(id) {
-    return orders.find(o => o.id === id) || null;
+    return cachedOrders.find(o => o.id === id || o.id.toLowerCase() === (id || '').toLowerCase()) || null;
   }
 
   static getStats() {
-    const totalOrder = orders.length;
-    const diproses = orders.filter(o => o.status === 'Diproses');
-    const siap = orders.filter(o => o.status === 'Siap Diambil');
-    const menumpuk = orders.filter(o => o.status === 'Menumpuk');
+    const totalOrder = cachedOrders.length;
+    const diproses = cachedOrders.filter(o => o.status === 'Diproses');
+    const siap = cachedOrders.filter(o => o.status === 'Siap Diambil');
+    const menumpuk = cachedOrders.filter(o => o.status === 'Menumpuk');
     
-    // Total beban kilogram yang sedang diproses
     const diprosesKg = diproses.reduce((acc, curr) => acc + (parseFloat(curr.weight) || 0), 0);
-    const totalKg = orders.reduce((acc, curr) => acc + (parseFloat(curr.weight) || 0), 0);
+    const totalKg = cachedOrders.reduce((acc, curr) => acc + (parseFloat(curr.weight) || 0), 0);
 
     return {
       totalOrder,
@@ -185,8 +104,11 @@ class OrderModel {
     };
   }
 
-  static create(orderData) {
-    const nextNum = 100 + orders.length + 1;
+  /**
+   * Menyimpan transaksi pesanan baru ke Database PostgreSQL (INSERT INTO orders)
+   */
+  static async create(orderData) {
+    const nextNum = 100 + cachedOrders.length + 1;
     const newId = `#ORD-${nextNum}`;
 
     const newOrder = {
@@ -194,7 +116,7 @@ class OrderModel {
       name: orderData.name || 'Pelanggan Toko',
       phone: orderData.phone || '081234567890',
       packageCode: orderData.packageCode || 'reguler',
-      packageName: orderData.packageName || 'Cuci Komplit Reguler',
+      packageName: orderData.packageName || 'Cuci Reguler',
       weight: parseFloat(orderData.weight) || 3.0,
       price: parseInt(orderData.price, 10) || 21000,
       notes: orderData.notes || 'Pakaian harian campur',
@@ -205,14 +127,52 @@ class OrderModel {
       createdAt: new Date().toISOString()
     };
 
-    orders.unshift(newOrder);
+    // 1. Simpan permanen ke PostgreSQL
+    try {
+      await db.query(`
+        INSERT INTO orders (
+          id, name, phone, package_code, package_name, weight, price, notes, ready_time, status, payment_status, payment_method
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+      `, [
+        newOrder.id,
+        newOrder.name,
+        newOrder.phone,
+        newOrder.packageCode,
+        newOrder.packageName,
+        newOrder.weight,
+        newOrder.price,
+        newOrder.notes,
+        newOrder.readyTime,
+        newOrder.status,
+        newOrder.paymentStatus,
+        newOrder.paymentMethod
+      ]);
+      console.log(`[OrderModel] ✅ Berhasil menyimpan transaksi ${newOrder.id} ke PostgreSQL!`);
+    } catch (dbErr) {
+      console.warn('[OrderModel] Gagal simpan ke DB, fallback memory:', dbErr.message);
+    }
+
+    // 2. Tambah ke cache aktif
+    cachedOrders.unshift(newOrder);
     return newOrder;
   }
 
-  static updateStatus(id, newStatus) {
-    const order = orders.find(o => o.id === id);
+  /**
+   * Mengubah status pengerjaan cucian di PostgreSQL (UPDATE orders SET status = ...)
+   */
+  static async updateStatus(id, newStatus) {
+    const order = cachedOrders.find(o => o.id === id || o.id.toLowerCase() === (id || '').toLowerCase());
     if (!order) return null;
+
     order.status = newStatus;
+
+    try {
+      await db.query('UPDATE orders SET status = $1 WHERE id = $2', [newStatus, order.id]);
+      console.log(`[OrderModel] ✅ Status order ${order.id} berhasil diperbarui di PostgreSQL menjadi "${newStatus}"!`);
+    } catch (err) {
+      console.warn('[OrderModel] Gagal update status di DB:', err.message);
+    }
+
     return order;
   }
 }
