@@ -14,18 +14,8 @@ const users = [
     role: 'Kasir & Pemilik Toko',
     avatar: 'SA',
     branch: 'Bantul, Yogyakarta'
-  },
-  {
-    id: 'USR-002',
-    username: 'admin',
-    email: 'admin@mylaundry.com',
-    password: 'admin',
-    altPassword: '123456',
-    name: 'Administrator',
-    role: 'Admin Toko',
-    avatar: 'AD',
-    branch: 'Pusat'
   }
+  // Catatan: Hanya 1 user sesuai PRD — persona tunggal Sarah Anggraini (Kasir & Pemilik Toko)
 ];
 
 class UserModel {

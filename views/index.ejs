@@ -186,8 +186,8 @@
               <% orders.forEach(order => { %>
                 <tr class="order-row hover:bg-stone-100/60 transition group" 
                     data-status="<%= order.status %>" 
-                    data-name="<%= order.name.toLowerCase() %>" 
-                    data-id="<%= order.id.toLowerCase() %>">
+                    data-name="<%= (order.name || '').toLowerCase() %>" 
+                    data-id="<%= (order.id || '').toLowerCase() %>">
                   
                   <!-- Kolom 1: Order ID -->
                   <td class="py-3.5 px-4 font-mono font-extrabold text-teal-800 whitespace-nowrap">
@@ -1119,14 +1119,14 @@ Pesan ini dikirim otomatis oleh MyLaundry AI. Terima kasih! 🙏
             <tbody class="divide-y divide-stone-100 font-medium" id="customer-table-body">
               <% customers.forEach((cust, idx) => { %>
                 <tr class="cust-row hover:bg-stone-50 transition" 
-                    data-name="<%= cust.name.toLowerCase() %>" 
-                    data-phone="<%= cust.phone %>" 
+                    data-name="<%= (cust.name || '').toLowerCase() %>" 
+                    data-phone="<%= cust.phone || '' %>" 
                     data-notes="<%= (cust.note || cust.address || '').toLowerCase() %>">
                   <td class="py-3.5 px-4 text-center font-mono text-stone-400 font-bold"><%= idx + 1 %></td>
                   <td class="py-3.5 px-4 whitespace-nowrap">
                     <div class="flex items-center space-x-3">
                       <div class="w-8 h-8 rounded-full bg-teal-100 text-teal-900 flex items-center justify-center font-black text-xs shadow-2xs">
-                        <%= cust.name.split(' ').map(n=>n[0]).slice(0,2).join('') %>
+                        <%= (cust.name || 'PL').split(' ').filter(Boolean).map(n=>n[0]).slice(0,2).join('') %>
                       </div>
                       <div>
                         <p class="font-bold text-stone-900 leading-snug"><%= cust.name %></p>
@@ -1342,8 +1342,7 @@ Pesan ini dikirim otomatis oleh MyLaundry AI. Terima kasih! 🙏
 
     </div>
 
-  <!-- ======================================================== -->
-  <!-- FLOATING CHATBOT ASISTEN AI (GEMINI ENGINE)              -->
+  </main>
   <!-- ======================================================== -->
 
   <!-- Floating Trigger Button (FAB - Fresh Eco Clean) -->
@@ -1530,7 +1529,7 @@ Pesan ini dikirim otomatis oleh MyLaundry AI. Terima kasih! 🙏
       box.classList.add('hidden');
       return;
     }
-    const matches = backendCustomers.filter(c => c.name.toLowerCase().includes(val.toLowerCase()));
+    const matches = backendCustomers.filter(c => (c.name || '').toLowerCase().includes(val.toLowerCase()));
     if (matches.length === 0) {
       box.classList.add('hidden');
       return;
@@ -2273,3 +2272,6 @@ Pakaian sedang kami proses dengan higienis dan rapi. Kami akan mengabari kembali
     calculateTotal();
   });
 </script>
+
+</body>
+</html>

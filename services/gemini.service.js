@@ -105,6 +105,7 @@ Kasir sering menulis dengan cara santai dan singkat. Anda HARUS memahami maksud 
 - "total cuci hari ini?" / "beban toko?" = total beban cucian
 - "paket apa aja?" / "harga cuci?" = daftar paket dan harga
 - "ord-097 siapa?" / "#097" = informasi pesanan nomor tersebut
+- "buatin caption" / "caption dong" / "caption promo" = buatkan pilihan draf caption promosi atau status WhatsApp/media sosial untuk toko MyLaundry yang menarik, kreatif, dan relevan dengan UMKM laundry.
 Prinsipnya: tangkap INTENT (maksud), bukan hanya kata kunci eksak.
 
 BATASAN KETAT DAN GUARDRAIL SISTEM (WAJIB DIPATUHI):
@@ -114,6 +115,7 @@ BATASAN KETAT DAN GUARDRAIL SISTEM (WAJIB DIPATUHI):
    - Status cucian, nomor nota pesanan (#ORD-xxx), rincian pelanggan (seperti Mas Dimas, Pak Bambang, Bu Ratna, dll.).
    - Total beban cucian toko dan cucian menumpuk.
    - Merangkai draf pesan WhatsApp sopan dan ramah untuk pelanggan sesuai data pesanan mereka.
+   - Merangkai caption promosi, status WhatsApp, atau ide konten promosi toko MyLaundry (misal: saat musim hujan, promo paket kilat, tips cucian wangi, ajakan mencuci di MyLaundry).
 2. PENOLAKAN SOPAN: Jika pengguna bertanya tentang topik di luar MyLaundry (misalnya: meminta dibuatkan kode pemrograman/game, generate gambar, matematika umum, politik, resep masakan, tugas kuliah umum, atau topik acak lainnya), Anda HARUS MENOLAK SECARA RAMAH DAN TEGAS.
    Contoh format penolakan yang diharapkan:
    "Maaf, saya adalah asisten virtual MyLaundry dan kemampuan saya terbatas pada informasi layanan, paket, harga, dan operasional toko MyLaundry. Apakah ada hal terkait cucian atau layanan kami yang bisa saya bantu?"
@@ -355,6 +357,18 @@ ${appContext}
       return `📍 **MyLaundry Cabang Bantul** berlokasi di Tamantirto, Kasihan, Bantul (dekat kampus UMY).\n\n` +
         `⏰ **Jam Operasional:** Buka setiap hari mulai pukul **07.00 s/d 21.00 WIB**.\n` +
         `📱 Hubungi WhatsApp kami di **0812-3456-7890** jika ingin antar-jemput atau tanya status pesanan.`;
+    }
+
+    // 4b. Pembuatan Caption Promosi / Media Sosial
+    if (lower.includes('caption') || lower.includes('promo') || lower.includes('iklan')) {
+      return `📢 **Ide Draf Caption Promosi Toko MyLaundry (Siap Pasang di Status WA / IG):**\n\n` +
+        `"Musim hujan cucian menumpuk dan takut bau apek? Serahkan pada ahlinya di **MyLaundry Cabang Bantul**! 🌧️🧺✨\n\n` +
+        `✅ Baju bersih tuntas, kering sempurna, dan wangi tahan lama\n` +
+        `✅ Setrika uap rapi bebas kusut siap pakai kerja/kuliah\n` +
+        `⚡ *Paket Cuci Kilat (24 Jam)* & *Reguler cuma Rp 7.000/kg!*\n\n` +
+        `📍 Lokasi: Tamantirto, Bantul (Dekat Kampus UMY)\n` +
+        `⏰ Buka setiap hari: 07.00 - 21.00 WIB\n\n` +
+        `Yuk bawa cucianmu hari ini dan nikmati pakaian bersih segar tanpa repot! 📲✨"`;
     }
 
     // 5. Analisis Beban Toko
