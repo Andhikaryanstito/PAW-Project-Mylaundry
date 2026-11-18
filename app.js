@@ -20,6 +20,7 @@ const appConfig = require('./config/appConfig');
 const db = require('./config/database');
 const requestLogger = require('./middlewares/logger');
 const apiRoutes = require('./routes/apiRoutes');
+const chatRoutes = require('./routes/chat.routes');
 const webRoutes = require('./routes/webRoutes');
 
 // 2. Inisialisasi Express App
@@ -43,6 +44,9 @@ app.use(requestLogger);
 // 7. Mendaftarkan Routing Aplikasi
 // Endpoint REST API CRUD (/api/status, /api/produk, dll.)
 app.use('/api', apiRoutes);
+
+// Endpoint AI Assistant Google Gemini (/api/chat) - Tugas Week 9
+app.use('/api', chatRoutes);
 
 // Endpoint Halaman Web Frontend EJS (/, /api-docs)
 app.use('/', webRoutes);
@@ -78,10 +82,11 @@ app.use((err, req, res, next) => {
 if (require.main === module) {
   app.listen(PORT, '0.0.0.0', async () => {
     console.log('==================================================================');
-    console.log(`🧺  SERVER MYLAUNDRY POS (WEEK 8 - DATABASE & CRUD) BERJALAN`);
+    console.log(`🧺  SERVER MYLAUNDRY POS (WEEK 9 - GEMINI AI INTEGRATION) BERJALAN`);
     console.log('==================================================================');
     console.log(`🌐  Alamat Frontend  : http://localhost:${PORT}`);
     console.log(`📡  Endpoint Status  : http://localhost:${PORT}/api/status`);
+    console.log(`🤖  Endpoint AI Chat : http://localhost:${PORT}/api/chat (POST)`);
     console.log(`📦  CRUD Produk API  : http://localhost:${PORT}/api/produk`);
     console.log(`🧪  Interactive Docs : http://localhost:${PORT}/api-docs`);
     console.log(`📝  Middleware Logger: AKTIF (GET, POST, PUT, DELETE, Path, Status)`);
