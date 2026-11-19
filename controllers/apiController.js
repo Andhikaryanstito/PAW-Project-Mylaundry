@@ -343,13 +343,12 @@ class ApiController {
       });
 
       // Otomatis daftarkan ke database pelanggan jika belum tercatat
-      // Selalu cek langsung ke DB (bukan cache) agar tidak bentrok saat server restart
+      // Cek berdasarkan nama pelanggan (jika nama baru belum ada di daftar pelanggan)
       let newCustomer = null;
       try {
         const allCusts = await CustomerModel.getAllFromDb();
         const existingCust = allCusts.find(c =>
-          c.phone === formattedPhone ||
-          c.name.toLowerCase() === rawName.toLowerCase()
+          c.name.trim().toLowerCase() === rawName.trim().toLowerCase()
         );
         if (!existingCust) {
           newCustomer = await CustomerModel.create({
