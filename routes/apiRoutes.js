@@ -30,6 +30,16 @@ router.delete('/produk/:id', ApiController.deleteProduk);
 router.get('/antrean', ApiController.getAntrean);
 router.post('/pesanan', ApiController.createOrder);
 router.patch('/pesanan/:id/status', ApiController.updateStatus);
+router.patch('/pesanan/:id/pembayaran', ApiController.updatePaymentStatus);
 router.get('/pelanggan', ApiController.getPelanggan);
+router.post('/pelanggan', ApiController.createPelanggan);
+router.put('/pelanggan/:id', ApiController.updatePelanggan);
+router.delete('/pelanggan/:id', ApiController.deletePelanggan);
+
+// ========================================================
+// 3. ENDPOINT PENGATURAN TOKO & PROFIL KASIR
+// ========================================================
+router.put('/pengaturan/profil', ApiController.updateProfilKasir);
+router.put('/pengaturan/toko', ApiController.updateProfilToko);
 
 module.exports = router;

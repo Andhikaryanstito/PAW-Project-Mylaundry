@@ -13,6 +13,7 @@
 const ProductModel = require('../models/productModel');
 const OrderModel = require('../models/orderModel');
 const CustomerModel = require('../models/customerModel');
+const UserModel = require('../models/userModel');
 const appConfig = require('../config/appConfig');
 const db = require('../config/database');
 
@@ -113,22 +114,38 @@ class ApiController {
     try {
       const { nama, harga, kategori, satuan, estimasi_jam, durasi_label, deskripsi, badge, icon, kode } = req.body;
 
-      if (!nama || harga === undefined || harga === null || harga === '') {
+      if (!nama || typeof nama !== 'string' || nama.trim().length < 2) {
         return res.status(400).json({
           status: 'error',
-          message: 'Nama produk dan harga wajib diisi.'
+          message: 'Nama layanan wajib diisi minimal 2 karakter.'
+        });
+      }
+
+      const numHarga = parseInt(harga, 10);
+      if (isNaN(numHarga) || numHarga <= 0) {
+        return res.status(400).json({
+          status: 'error',
+          message: 'Harga layanan harus berupa angka positif lebih dari 0 (contoh: 8000).'
+        });
+      }
+
+      const numEstimasi = parseInt(estimasi_jam || 24, 10);
+      if (isNaN(numEstimasi) || numEstimasi <= 0) {
+        return res.status(400).json({
+          status: 'error',
+          message: 'Estimasi durasi pengerjaan harus berupa angka jam positif (contoh: 24).'
         });
       }
 
       const newProduct = await ProductModel.create({
-        nama,
-        harga,
+        nama: nama.trim(),
+        harga: numHarga,
         kategori: kategori || 'Kiloan',
-        satuan: satuan || 'kg',
-        estimasi_jam: estimasi_jam || 24,
-        durasi_label: durasi_label || `${estimasi_jam || 24} Jam`,
-        deskripsi: deskripsi || '',
-        badge: badge || '',
+        satuan: satuan ? satuan.trim() : 'kg',
+        estimasi_jam: numEstimasi,
+        durasi_label: durasi_label ? durasi_label.trim() : `${numEstimasi} Jam`,
+        deskripsi: deskripsi ? deskripsi.trim() : '',
+        badge: badge ? badge.trim() : '',
         icon: icon || '🧺',
         kode: kode || undefined
       });
@@ -157,6 +174,33 @@ class ApiController {
       const { id } = req.params;
       const { nama, harga, kategori, satuan, estimasi_jam, durasi_label, deskripsi, badge, icon } = req.body;
 
+      if (nama !== undefined && (typeof nama !== 'string' || nama.trim().length < 2)) {
+        return res.status(400).json({
+          status: 'error',
+          message: 'Nama layanan wajib diisi minimal 2 karakter.'
+        });
+      }
+
+      if (harga !== undefined) {
+        const parsedHarga = parseInt(harga, 10);
+        if (isNaN(parsedHarga) || parsedHarga <= 0) {
+          return res.status(400).json({
+            status: 'error',
+            message: 'Harga layanan harus berupa angka positif lebih dari 0.'
+          });
+        }
+      }
+
+      if (estimasi_jam !== undefined) {
+        const parsedEstimasi = parseInt(estimasi_jam, 10);
+        if (isNaN(parsedEstimasi) || parsedEstimasi <= 0) {
+          return res.status(400).json({
+            status: 'error',
+            message: 'Estimasi durasi pengerjaan harus berupa angka jam positif.'
+          });
+        }
+      }
+
       const existing = await ProductModel.getById(id);
       if (!existing) {
         return res.status(404).json({
@@ -165,16 +209,19 @@ class ApiController {
         });
       }
 
+      const numHarga = harga !== undefined ? parseInt(harga, 10) : existing.harga;
+      const numEstimasi = estimasi_jam !== undefined ? parseInt(estimasi_jam, 10) : existing.estimasi_jam;
+
       const updated = await ProductModel.update(id, {
-        nama,
-        harga,
-        kategori,
-        satuan,
-        estimasi_jam,
-        durasi_label,
-        deskripsi,
-        badge,
-        icon
+        nama: nama ? nama.trim() : existing.nama,
+        harga: numHarga,
+        kategori: kategori || existing.kategori,
+        satuan: satuan ? satuan.trim() : existing.satuan,
+        estimasi_jam: numEstimasi,
+        durasi_label: durasi_label ? durasi_label.trim() : existing.durasi_label,
+        deskripsi: deskripsi !== undefined ? deskripsi.trim() : existing.deskripsi,
+        badge: badge !== undefined ? badge.trim() : existing.badge,
+        icon: icon || existing.icon
       });
 
       return res.status(200).json({
@@ -245,36 +292,76 @@ class ApiController {
    */
   static async createOrder(req, res) {
     try {
-      const { name, phone, packageCode, weight, notes, paymentStatus, paymentMethod, readyTime } = req.body;
+      const { packageCode, weight, notes, paymentStatus, paymentMethod, readyTime } = req.body;
+      const rawName = String(req.body.name || req.body.customerName || req.body.nama || '').trim();
+      const rawPhone = String(req.body.phone || req.body.wa || req.body.telepon || req.body.no_hp || '').trim();
 
-      if (!name || !phone || !weight) {
+      if (!rawName || rawName.length < 2) {
         return res.status(400).json({
           status: 'error',
-          message: 'Nama pelanggan, nomor WhatsApp, dan berat pakaian wajib diisi.'
+          message: 'Nama pelanggan wajib diisi (minimal 2 karakter).'
+        });
+      }
+
+      // Validasi ketat nomor telepon: hanya digit, 10-15 digit
+      const cleanPhone = rawPhone.replace(/[^0-9]/g, '');
+      if (!cleanPhone || cleanPhone.length < 10 || cleanPhone.length > 15) {
+        return res.status(400).json({
+          status: 'error',
+          message: 'Nomor WhatsApp tidak valid. Masukkan 10-15 digit angka (contoh: 081234567890).'
+        });
+      }
+
+      // Normalisasi format Indonesia
+      const formattedPhone = cleanPhone.startsWith('62') 
+        ? '0' + cleanPhone.slice(2) 
+        : (cleanPhone.startsWith('0') ? cleanPhone : '0' + cleanPhone);
+
+      // Validasi berat pakaian
+      const numWeight = parseFloat(weight);
+      if (isNaN(numWeight) || numWeight <= 0 || numWeight > 200) {
+        return res.status(400).json({
+          status: 'error',
+          message: 'Berat cucian harus berupa angka positif antara 0.1 - 200 Kg.'
         });
       }
 
       const product = (await ProductModel.getByCode(packageCode || 'reguler')) || (await ProductModel.getAll())[0];
-      const numWeight = parseFloat(weight) || 1;
       const totalPrice = Math.round(numWeight * (product ? product.harga : 7000));
 
       const newOrder = await OrderModel.create({
-        name,
-        phone,
+        name: rawName,
+        phone: formattedPhone,
         packageCode: product ? product.kode : 'reguler',
         packageName: product ? product.nama : 'Cuci Reguler',
         weight: numWeight,
         price: totalPrice,
-        notes,
-        paymentStatus,
-        paymentMethod,
-        readyTime
+        notes: notes ? notes.trim() : 'Pakaian harian campur',
+        paymentStatus: paymentStatus || 'Lunas',
+        paymentMethod: paymentMethod || 'Tunai',
+        readyTime: readyTime || '-'
       });
+
+      // Otomatis daftarkan ke database pelanggan jika belum tercatat
+      let newCustomer = null;
+      try {
+        const existingCust = CustomerModel.search(formattedPhone);
+        if (!existingCust || existingCust.length === 0) {
+          newCustomer = await CustomerModel.create({
+            name: rawName,
+            phone: formattedPhone,
+            note: notes ? notes.trim() : 'Pelanggan baru dari Kasir POS'
+          });
+        }
+      } catch (custErr) {
+        console.warn('[ApiController] Gagal auto-sync pelanggan:', custErr.message);
+      }
 
       return res.status(201).json({
         status: 'success',
         message: 'Transaksi kasir berhasil disimpan.',
-        data: newOrder
+        data: newOrder,
+        customer: newCustomer
       });
     } catch (err) {
       console.error('Error create order:', err);
@@ -312,14 +399,155 @@ class ApiController {
   }
 
   /**
+   * Endpoint Tambahan: PATCH /api/pesanan/:id/pembayaran
+   * Mengubah status pembayaran (Lunas / Belum Lunas) dan metode bayar (Tunai / QRIS)
+   */
+  static async updatePaymentStatus(req, res) {
+    try {
+      const { id } = req.params;
+      const { paymentStatus, paymentMethod } = req.body;
+
+      if (!paymentStatus) {
+        return res.status(400).json({
+          status: 'error',
+          message: 'Status pembayaran wajib diisi (contoh: Lunas / Belum Lunas).'
+        });
+      }
+
+      const updated = await OrderModel.updatePaymentStatus(id, paymentStatus, paymentMethod || 'Tunai');
+      if (!updated) {
+        return res.status(404).json({
+          status: 'error',
+          message: `Pesanan dengan ID ${id} tidak ditemukan.`
+        });
+      }
+
+      return res.status(200).json({
+        status: 'success',
+        message: `Status pembayaran pesanan ${id} berhasil diubah menjadi ${paymentStatus} (${updated.paymentMethod}).`,
+        data: updated
+      });
+    } catch (err) {
+      console.error('Error update payment status:', err);
+      return res.status(500).json({ status: 'error', message: err.message });
+    }
+  }
+
+  /**
    * Endpoint Tambahan: GET /api/pelanggan
    */
-  static getPelanggan(req, res) {
+  static async getPelanggan(req, res) {
     const { q } = req.query;
     if (q) {
       return res.status(200).json(CustomerModel.search(q));
     }
-    return res.status(200).json(CustomerModel.getAll());
+    const custs = await CustomerModel.getAllFromDb();
+    return res.status(200).json(custs);
+  }
+
+  // POST /api/pelanggan
+  static async createPelanggan(req, res) {
+    try {
+      const { note, address } = req.body;
+      const rawName = String(req.body.name || req.body.nama || '').trim();
+      const rawPhone = String(req.body.phone || req.body.telepon || req.body.no_hp || req.body.wa || '').trim();
+
+      if (!rawName || rawName.length < 2) {
+        return res.status(400).json({ status: 'error', message: 'Nama pelanggan wajib diisi (minimal 2 karakter).' });
+      }
+
+      const cleanPhone = rawPhone.replace(/[^0-9]/g, '');
+      if (!cleanPhone || cleanPhone.length < 10 || cleanPhone.length > 15) {
+        return res.status(400).json({ status: 'error', message: 'Nomor WhatsApp tidak valid. Masukkan 10-15 digit angka (contoh: 081234567890).' });
+      }
+
+      const formattedPhone = cleanPhone.startsWith('62') 
+        ? '0' + cleanPhone.slice(2) 
+        : (cleanPhone.startsWith('0') ? cleanPhone : '0' + cleanPhone);
+
+      const newCust = await CustomerModel.create({
+        name: rawName,
+        phone: formattedPhone,
+        note: (note || address || '-').trim()
+      });
+      return res.status(201).json({ status: 'success', message: 'Pelanggan berhasil ditambahkan.', data: newCust });
+    } catch (err) {
+      return res.status(500).json({ status: 'error', message: err.message });
+    }
+  }
+
+  // PUT /api/pelanggan/:id
+  static async updatePelanggan(req, res) {
+    const { id } = req.params;
+    const { note, address } = req.body;
+    const rawName = String(req.body.name || req.body.nama || '').trim();
+    const rawPhone = String(req.body.phone || req.body.telepon || req.body.no_hp || req.body.wa || '').trim();
+
+    if (!rawName || rawName.length < 2) {
+      return res.status(400).json({ status: 'error', message: 'Nama pelanggan wajib diisi (minimal 2 karakter).' });
+    }
+
+    const cleanPhone = rawPhone.replace(/[^0-9]/g, '');
+    if (!cleanPhone || cleanPhone.length < 10 || cleanPhone.length > 15) {
+      return res.status(400).json({ status: 'error', message: 'Nomor WhatsApp tidak valid. Masukkan 10-15 digit angka (contoh: 081234567890).' });
+    }
+
+    const formattedPhone = cleanPhone.startsWith('62') 
+      ? '0' + cleanPhone.slice(2) 
+      : (cleanPhone.startsWith('0') ? cleanPhone : '0' + cleanPhone);
+
+    const updated = await CustomerModel.update(id, {
+      name: rawName,
+      phone: formattedPhone,
+      note: (note || address || '-').trim()
+    });
+    if (!updated) return res.status(404).json({ status: 'error', message: 'Pelanggan tidak ditemukan.' });
+    return res.status(200).json({ status: 'success', message: 'Data pelanggan berhasil diperbarui.', data: updated });
+  }
+
+  // DELETE /api/pelanggan/:id
+  static async deletePelanggan(req, res) {
+    const { id } = req.params;
+    await CustomerModel.delete(id);
+    return res.status(200).json({ status: 'success', message: `Pelanggan ${id} berhasil dihapus.` });
+  }
+
+  // PUT /api/pengaturan/profil
+  static updateProfilKasir(req, res) {
+    const { name, email, branch } = req.body;
+    if (!name || typeof name !== 'string' || name.trim().length < 2) {
+      return res.status(400).json({ status: 'error', message: 'Nama wajib diisi minimal 2 karakter.' });
+    }
+    const updated = UserModel.updateProfile('sarah', {
+      name: name.trim(),
+      email: email ? email.trim() : undefined,
+      branch: branch ? branch.trim() : undefined
+    });
+    if (!updated) return res.status(404).json({ status: 'error', message: 'User tidak ditemukan.' });
+
+    // Update session cookie
+    const sessionData = encodeURIComponent(JSON.stringify(updated));
+    res.setHeader('Set-Cookie', `mylaundry_session=${sessionData}; Path=/; Max-Age=${7 * 24 * 3600}; SameSite=Lax`);
+
+    return res.status(200).json({ status: 'success', message: 'Profil kasir berhasil diperbarui.', data: updated });
+  }
+
+  // PUT /api/pengaturan/toko
+  static updateProfilToko(req, res) {
+    const { name, branch, address, hours, phone } = req.body;
+    if (phone) {
+      const cleanPhone = phone.replace(/[^0-9\-+]/g, '');
+      if (cleanPhone.length < 8) {
+        return res.status(400).json({ status: 'error', message: 'Nomor telepon toko minimal 8 digit.' });
+      }
+      appConfig.store.phone = cleanPhone;
+    }
+    if (name) appConfig.store.name = name.trim();
+    if (branch) appConfig.store.branch = branch.trim();
+    if (address) appConfig.store.address = address.trim();
+    if (hours) appConfig.store.hours = hours.trim();
+
+    return res.status(200).json({ status: 'success', message: 'Profil toko berhasil diperbarui.', data: appConfig.store });
   }
 }
 

@@ -53,7 +53,10 @@ async function migrateAndSeed() {
         ['CUST-04', 'Ibu Ratna Dewi', '081388990011', 'Sprei king size & selimut tebal'],
         ['CUST-05', 'Ahmad Fauzi', '082155443322', 'Kaos oblong & jaket hoodie'],
         ['CUST-06', 'Pak Bambang', '081223344556', 'Kemeja batik & dinas'],
-        ['CUST-07', 'Rina Kusuma', '087711223344', 'Blazer & rok plisket']
+        ['CUST-07', 'Rina Kusuma', '087711223344', 'Blazer & rok plisket'],
+        ['CUST-08', 'Yoga Pratama', '085299887766', 'Pakaian kasual harian'],
+        ['CUST-09', 'Lestari Putri', '081900112233', 'Gamis & pakaian kerja'],
+        ['CUST-10', 'Dedi Setiawan', '083812345678', 'Kaos & kemeja santai']
       ];
 
       for (const [id, name, phone, note] of defaultCustomers) {

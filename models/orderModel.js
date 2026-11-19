@@ -107,9 +107,28 @@ class OrderModel {
   /**
    * Menyimpan transaksi pesanan baru ke Database PostgreSQL (INSERT INTO orders)
    */
+  static async getNextId() {
+    let maxNum = 100;
+    try {
+      const res = await db.query("SELECT id FROM orders WHERE id ~ '^#ORD-[0-9]+$'");
+      if (res.rows) {
+        res.rows.forEach(r => {
+          const num = parseInt(r.id.replace('#ORD-', ''), 10);
+          if (!isNaN(num) && num > maxNum) maxNum = num;
+        });
+      }
+    } catch (e) {
+      // fallback
+    }
+    cachedOrders.forEach(r => {
+      const num = parseInt((r.id || '').replace('#ORD-', ''), 10);
+      if (!isNaN(num) && num > maxNum) maxNum = num;
+    });
+    return `#ORD-${maxNum + 1}`;
+  }
+
   static async create(orderData) {
-    const nextNum = 100 + cachedOrders.length + 1;
-    const newId = `#ORD-${nextNum}`;
+    const newId = await this.getNextId();
 
     const newOrder = {
       id: newId,
@@ -171,6 +190,33 @@ class OrderModel {
       console.log(`[OrderModel] ✅ Status order ${order.id} berhasil diperbarui di PostgreSQL menjadi "${newStatus}"!`);
     } catch (err) {
       console.warn('[OrderModel] Gagal update status di DB:', err.message);
+    }
+
+    return order;
+  }
+
+  /**
+   * Mengubah status pembayaran pesanan di PostgreSQL (UPDATE orders SET payment_status = ..., payment_method = ...)
+   */
+  static async updatePaymentStatus(id, paymentStatus, paymentMethod = 'Tunai') {
+    const order = cachedOrders.find(o => o.id === id || o.id.toLowerCase() === (id || '').toLowerCase());
+    if (!order) return null;
+
+    order.paymentStatus = paymentStatus;
+    if (paymentMethod && paymentMethod !== '-') {
+      order.paymentMethod = paymentMethod;
+    } else if (paymentStatus === 'Belum Lunas') {
+      order.paymentMethod = '-';
+    }
+
+    try {
+      await db.query(
+        'UPDATE orders SET payment_status = $1, payment_method = $2 WHERE id = $3',
+        [order.paymentStatus, order.paymentMethod, order.id]
+      );
+      console.log(`[OrderModel] ✅ Status pembayaran order ${order.id} berhasil diperbarui di PostgreSQL menjadi "${order.paymentStatus} (${order.paymentMethod})"!`);
+    } catch (err) {
+      console.warn('[OrderModel] Gagal update status pembayaran di DB:', err.message);
     }
 
     return order;

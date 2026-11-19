@@ -51,6 +51,19 @@ class UserModel {
 
     return { success: false, message: 'Kata sandi (password) yang Anda masukkan salah.' };
   }
+
+  static updateProfile(identifier, data) {
+    const user = this.findByUsernameOrEmail(identifier) || users[0];
+    if (!user) return null;
+    if (data.name) user.name = data.name.trim();
+    if (data.email) user.email = data.email.trim();
+    if (data.branch) user.branch = data.branch.trim();
+    if (data.role) user.role = data.role.trim();
+    if (data.name) {
+      user.avatar = data.name.split(' ').filter(Boolean).map(n => n[0]).slice(0, 2).join('').toUpperCase();
+    }
+    return user;
+  }
 }
 
 module.exports = UserModel;

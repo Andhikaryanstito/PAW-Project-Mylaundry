@@ -23,25 +23,26 @@
           },
           colors: {
             brand: {
-              50: '#f0fdfa',
-              100: '#ccfbf1',
-              200: '#99f6e4',
-              300: '#5eead4',
-              400: '#2dd4bf',
-              500: '#14b8a6',
-              600: '#0d9488',
-              700: '#0f766e',
-              800: '#115e59',
-              900: '#134e4a',
-              950: '#042f2e',
+              50: '#F0FDF4',
+              100: '#DCFCE7',
+              200: '#BBF7D0',
+              300: '#86EFAC',
+              400: '#34D399',
+              500: '#10B981',
+              600: '#059669',
+              700: '#0F766E',
+              800: '#115E59',
+              900: '#134E4A',
+              950: '#042F2E',
             }
           },
           boxShadow: {
-            'subtle': '0 1px 3px 0 rgba(28, 25, 23, 0.06), 0 1px 2px -1px rgba(28, 25, 23, 0.06)',
-            'card': '0 4px 12px -2px rgba(28, 25, 23, 0.06), 0 2px 6px -1px rgba(28, 25, 23, 0.04)',
-            'card-hover': '0 12px 24px -4px rgba(28, 25, 23, 0.10), 0 4px 8px -2px rgba(28, 25, 23, 0.04)',
-            'modal': '0 25px 50px -12px rgba(28, 25, 23, 0.25)',
-            'drawer': '-12px 0 35px rgba(28, 25, 23, 0.12)',
+            'subtle': '0 1px 3px 0 rgba(15, 23, 42, 0.04), 0 1px 2px -1px rgba(15, 23, 42, 0.03)',
+            'card': '0 1px 3px 0 rgba(15, 23, 42, 0.04), 0 4px 16px -2px rgba(15, 23, 42, 0.05)',
+            'card-hover': '0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.03)',
+            'modal': '0 25px 50px -12px rgba(15, 23, 42, 0.25)',
+            'glow-teal': '0 4px 20px -2px rgba(15, 118, 110, 0.25)',
+            'glow-emerald': '0 4px 20px -2px rgba(16, 185, 129, 0.25)',
           }
         }
       }
@@ -50,16 +51,17 @@
   
   <style>
     /* ====================================================
-       FRESH ECO-CLEAN LAUNDRY THEME - MyLaundry POS
-       Natural, Earthy, Organic, Deep Forest Teal & Warm Linen
+       FRESH ECO-LUXE THEME - MyLaundry POS
+       Deep Forest Teal, Vivid Emerald & Crisp Modern Surfaces
     ==================================================== */
 
     body {
-      background-color: #FAFAF9; /* Warm Linen Stone 50 */
-      color: #1C1917; /* Warm Dark Stone 900 */
+      background-color: #F8FAFC; /* Clean Crisp Slate 50 */
+      color: #0F172A; /* Slate 900 */
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
     /* Tabular figures for numbers, currency, and IDs */
@@ -73,47 +75,137 @@
       height: 6px;
     }
     ::-webkit-scrollbar-track {
-      background: #F5F5F4;
+      background: #F1F5F9;
     }
     ::-webkit-scrollbar-thumb {
-      background: #D6D3D1;
+      background: #CBD5E1;
       border-radius: 999px;
     }
     ::-webkit-scrollbar-thumb:hover {
-      background: #A8A29E;
+      background: #94A3B8;
     }
 
-    /* Badges Status Natural Kontras (Fresh Eco Style) */
+    /* Badges Status Modern High-Contrast */
     .badge-processing {
       background-color: #FEF3C7;
       color: #92400E;
-      border: 1px solid #FDE68A;
+      border: 1px solid #FCD34D;
     }
     .badge-ready {
-      background-color: #CCFBF1;
-      color: #115E59;
-      border: 1px solid #99F6E4;
+      background-color: #D1FAE5;
+      color: #065F46;
+      border: 1px solid #6EE7B7;
     }
     .badge-overdue {
       background-color: #FEE2E2;
       color: #991B1B;
-      border: 1px solid #FECACA;
+      border: 1px solid #FCA5A5;
     }
     .badge-paid {
-      background-color: #F0FDF4;
-      color: #166534;
-      border: 1px solid #BBF7D0;
+      background-color: #ECFDF5;
+      color: #047857;
+      border: 1px solid #A7F3D0;
     }
     .badge-unpaid {
       background-color: #FFF7ED;
-      color: #9A3412;
-      border: 1px solid #FED7AA;
+      color: #C2410C;
+      border: 1px solid #FDBA74;
     }
 
-    /* Animasi Smooth Drawer */
-    .drawer-transition {
-      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+    /* Smooth Transitions */
+    .smooth-transition {
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Gradient text utility */
+    .gradient-text {
+      background: linear-gradient(135deg, #0F766E 0%, #10B981 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Premium card hover lift */
+    .card-lift {
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .card-lift:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px -8px rgba(15, 118, 110, 0.15), 0 4px 8px -4px rgba(15, 23, 42, 0.08);
+    }
+
+    /* Stat card gradient accent top bar animation */
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    /* Input focus glow */
+    input:focus, select:focus, textarea:focus {
+      box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.12);
+    }
+
+    /* Nav active indicator */
+    .nav-active-indicator {
+      position: relative;
+    }
+    .nav-active-indicator::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 60%;
+      background: linear-gradient(to bottom, #0F766E, #10B981);
+      border-radius: 0 2px 2px 0;
+    }
+
+    /* Table row hover accent */
+    #orders-table tbody tr:hover td:first-child {
+      border-left: 3px solid #0F766E;
+    }
+
+    /* Button press effect */
+    button:active:not(:disabled) {
+      transform: scale(0.97);
+    }
+
+    /* Modal overlay blur */
+    [id^="modal-"]:not(.hidden) {
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+
+    /* Pulse badge for new items */
+    @keyframes badge-pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+    .badge-new {
+      animation: badge-pulse 2s ease-in-out infinite;
+    }
+
+    /* Receipt card gradient */
+    .receipt-card {
+      background: linear-gradient(135deg, #0F766E 0%, #065F46 100%);
+    }
+
+    /* Toast notification */
+    @keyframes slide-in-right {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    .toast-enter {
+      animation: slide-in-right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Sidebar nav active state */
+    .nav-tab.active-nav {
+      background: linear-gradient(135deg, #0F766E, #059669);
+      color: white;
+      box-shadow: 0 4px 12px rgba(15, 118, 110, 0.3);
     }
   </style>
 </head>
-<body class="flex bg-stone-50 min-h-screen text-stone-900 antialiased selection:bg-teal-100 selection:text-teal-900">
+<body class="flex bg-slate-50 min-h-screen text-slate-900 antialiased selection:bg-teal-100 selection:text-teal-900">
